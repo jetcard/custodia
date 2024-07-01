@@ -1,0 +1,8 @@
+#surefire
+#Fri Nov 03 09:21:40 COT 2023
+maven.ext.class.path=C\:\\Program Files (x86)\\NetBeans 8.2 RC\\java\\maven-nblib\\netbeans-eventspy.jar
+user.dir=C\:\\proyectos\\2023\\custodiacartasnotarialescomentario2\\fuente\\webcustodia\\webcustodia
+file.encoding=UTF-8
+localRepository=C\:\\Users\\YR19155\\.m2\\repository
+netbeans.deploy=true
+basedir=C\:\\proyectos\\2023\\custodiacartasnotarialescomentario2\\fuente\\webcustodia\\webcustodia

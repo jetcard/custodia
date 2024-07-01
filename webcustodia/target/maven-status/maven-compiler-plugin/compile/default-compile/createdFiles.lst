@@ -1,0 +1,13 @@
+pop\webcustodia\webservices\Exception_Exception.class
+pop\webcustodia\webservices\Correo.class
+pop\webcustodia\webservices\Usuario.class
+pop\webcustodia\webservices\package-info.class
+pop\webcustodia\webservices\ObtenerUsuario.class
+pop\webcustodia\webservices\SeguridadWS.class
+pop\webcustodia\webservices\Rol.class
+pop\webcustodia\webservices\Telefono.class
+pop\webcustodia\webservices\Menu.class
+pop\webcustodia\webservices\CambiarUsuarioResponse.class
+pop\webcustodia\webservices\Exception.class
+pop\webcustodia\webservices\MenuEventos.class
+pop\webcustodia\webservices\SeguridadWS_Service.class

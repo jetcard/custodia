@@ -1,0 +1,930 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="es" 
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://java.sun.com/jsf/core" >
+
+    <ui:composition template="/resources/personal/plantillas/template.xhtml">
+        <ui:define name="content">
+            <f:event type="postAddToView" listener="#{tablaGeneralBean.buscarTablasGenerales()}"  />            
+            <!-- Paginacion header -->
+                <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Tablas generales</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="index.xhtml">Inicio</a>
+                        </li>
+                        <li>
+                            <a>Parámetros</a>
+                        </li>
+                        <li class="active">
+                            <strong>Registrar tablas generales</strong>
+                        </li>
+                    </ol>
+                </div>
+                </div>
+            
+            <!--body onload="ocultar()"></body-->
+            <!-- Filas-->
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <form jsf:id="formEstaCuentaF" jsf:prependId="false" >
+                    <!-- Filtros-->
+                    <div class="row">
+                        <!-- Filtros-->
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-title">
+                                    <h5>
+                                        Filtros
+                                        <small>Tablas generales</small>
+                                    </h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <!-- Fila 01 Filtros --> 
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                            <span class="input-group-btn">
+                                                <a jsf:id="linkBuscar" jsf:actionListener="#{tablaGeneralBean.buscarTablasGenerales()}" class="btn btn-primary btn-block m-t"   >
+                                                    <i class="fa fa-search"></i>
+                                                    Buscar
+                                                </a>
+                                            </span>
+                                        </div>
+                                       
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-title">
+                    <p style="color:red">
+                        <strong>
+                        #{tablaGeneralBean.mensajeRpta}
+                        </strong>
+                    </p>
+                   </div>                    
+                </form>                
+                
+                <h:form enctype="multipart/form-data" prependId="false"  >
+                    <div class="row">
+                      <div class="col-sm-2" >
+                          <span class="input-group-btn">
+                              <table class="table"> <tr>
+                                      <th><h:commandButton id="btngaregaSegui" value="Agregar" class="btn btn-primary btn-block m-t"  action="#{tablaGeneralBean.nuevaTablaGeneral()}"  />
+                                          </th>
+                                   </tr>
+                              </table>       
+                     </span>
+                     </div>                    
+                     </div>                     
+                    <!-- Fila 0002 -->
+                    <div class="row">
+                        <!-- Lista de clientes -->
+                        <div class="col-sm-12">
+                                <div class="ibox-content">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Tablas generales</a></li>
+                                    </ul>
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Código </th>
+                                                            <th>Descripción</th>
+                                                            <th>       Parámetro       </th>
+                                                            <th>       Detalle         </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <ui:repeat var="tabla" value="#{tablaGeneralBean.cobTablasList}" varStatus="tchnS">
+                                                        <tr height="10" >
+                                                            <th>#{tabla.ctablaId}</th>
+                                                            <th>#{tabla.ddescripcion}</th>                                                        
+                                                            <th>
+                                                                <span class="input-group-btn">
+                                                                <h:commandButton id="btnAccion2" value="Modificar"  class="btn btn-primary btn-block m-t" action="#{tablaGeneralBean.modificaTablaGeneral(tabla)}"  />
+                                                                </span>
+                                                            </th>
+                                                            <th>
+                                                                <span class="input-group-btn">
+                                                                    <h:commandButton id="btnSeguiNuevo" value="Ver"  class="btn btn-primary btn-block m-t" action="#{tablaGeneralBean.verDetalle(tabla)}"  />
+                                                                </span>
+                                                            </th>
+                                                        </tr>
+                                                    </ui:repeat> 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                </div>
+                        </div>
+                    </div>
+                </h:form>                
+                
+                <form jsf:id="formAddTablaGeneral" rendered="#{tablaGeneralBean.mostrarAddTablaGeneral}"  onkeypress="return anular(event)">
+                    <!-- Fila 03 Detalle --> 
+                    <div class="row">
+                         <!-- Filtros-->
+                         <div class="col-lg-12">
+                             <div class="ibox">
+                                    <ul class="nav nav-tabs">
+                                              <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Registro de tabla general</a></li>
+                                   </ul>
+                                 <div class="ibox-content">
+                                      <table class="table table-bordered" >
+                                       <tbody>
+                                         <thead>
+                                             <th>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Descripcion: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <h:inputText class="input-sm form-control" id="descripcion" value="#{tablaGeneralBean.descripcionTablaGeneral}">
+                                                         </h:inputText>
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Abrev.: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <h:inputText class="input-sm form-control" id="descripcioncorta" value="#{tablaGeneralBean.descripcionCorta}">
+                                                         </h:inputText>
+
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Ultimo usuario: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <label class="font-noraml">#{tablaGeneralBean.usuario}</label>
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                        
+                                                 
+                                                 
+                                                 <div class="row">
+                                                     <div class="col-sm-3"> </div>
+                                                     <div class="col-sm-1" id="bt1" >
+                                                         <h:commandButton   id="btn1"  value="Guardar" class="btn btn-primary btn-block m-t"  action="#{tablaGeneralBean.insertarTablaGeneral()}"> 
+                                                         </h:commandButton>
+                                                    </div>
+                                                    <div  jsf:id="msg"  jsf:name="msg">
+                                                        <div jsf:rendered="#{tablaGeneralBean.showMsg}">
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    toastr.options = {
+                                                                        "closeButton": true,
+                                                                        "debug": false,
+                                                                        "progressBar": true,
+                                                                        "preventDuplicates": false,
+                                                                        "positionClass": "toast-top-right",
+                                                                        "onclick": null,
+                                                                        "showDuration": "400",
+                                                                        "hideDuration": "1000",
+                                                                        "timeOut": "7000",
+                                                                        "extendedTimeOut": "1000",
+                                                                        "showEasing": "swing",
+                                                                        "hideEasing": "linear",
+                                                                        "showMethod": "fadeIn",
+                                                                        "hideMethod": "fadeOut"
+                                                                    };
+                                                                    toastr.#{tablaGeneralBean.tipoMsj}('#{tablaGeneralBean.mensaje}', 'Mensaje');
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                     <div class="col-sm-1" >
+                                                         <h:commandButton   id="btn2"  value="cerrar" class="btn btn-primary btn-block m-t"   action="#{tablaGeneralBean.cerrarPantallaAddTablaGeneral()}"  /> 
+                                                     </div>
+                                                 </div>
+                                             </th>
+                                          </thead>
+                                        </tbody>
+                                     </table>
+                                 </div>   
+                                </div>
+                             </div>
+                         </div>
+                </form>                       
+                                
+                <form jsf:id="formModiTablaGeneral" rendered="#{tablaGeneralBean.mostrarModiTablaGeneral}"  onkeypress="return anular(event)">
+                    <!-- Fila 03 Detalle --> 
+                    <div class="row">
+                         <!-- Filtros-->
+                         <div class="col-lg-12">
+                             <div class="ibox">
+                                    <ul class="nav nav-tabs">
+                                              <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Modificar tabla general</a></li>
+                                   </ul>
+                                 <div class="ibox-content">
+                                      <table class="table table-bordered" >
+                                       <tbody>
+                                         <thead>
+                                             <th>
+                                                <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Id Tabla: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <label class="font-noraml">#{tablaGeneralBean.tablaId}</label>
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>       
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Descripcion: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <h:inputText class="input-sm form-control" id="descripcionModi" value="#{tablaGeneralBean.descripcionTablaGeneral}">
+                                                         </h:inputText>
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Abrev.: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <h:inputText class="input-sm form-control" id="descripcioncortaModi" value="#{tablaGeneralBean.descripcionCorta}">
+                                                         </h:inputText>
+
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Ultimo usuario: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <label class="font-noraml">#{tablaGeneralBean.usuario}</label>
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                        
+                                                 
+                                                 
+                                                 <div class="row">
+                                                     <div class="col-sm-3"> </div>
+                                                     <div class="col-sm-1" id="bt1" >
+                                                         <h:commandButton   id="btn1"  value="Guardar" class="btn btn-primary btn-block m-t"  action="#{tablaGeneralBean.modificarTablaGeneral()}"> 
+                                                         </h:commandButton>
+                                                    </div>
+                                                    <div  jsf:id="msg"  jsf:name="msg">
+                                                        <div jsf:rendered="#{tablaGeneralBean.showMsg}">
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    toastr.options = {
+                                                                        "closeButton": true,
+                                                                        "debug": false,
+                                                                        "progressBar": true,
+                                                                        "preventDuplicates": false,
+                                                                        "positionClass": "toast-top-right",
+                                                                        "onclick": null,
+                                                                        "showDuration": "400",
+                                                                        "hideDuration": "1000",
+                                                                        "timeOut": "7000",
+                                                                        "extendedTimeOut": "1000",
+                                                                        "showEasing": "swing",
+                                                                        "hideEasing": "linear",
+                                                                        "showMethod": "fadeIn",
+                                                                        "hideMethod": "fadeOut"
+                                                                    };
+                                                                    toastr.#{tablaGeneralBean.tipoMsj}('#{tablaGeneralBean.mensaje}', 'Mensaje');
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                     <div class="col-sm-1" >
+                                                         <h:commandButton   id="btn2"  value="cerrar" class="btn btn-primary btn-block m-t"   action="#{tablaGeneralBean.cerrarPantallaModiTablaGeneral()}"  /> 
+                                                     </div>
+                                                 </div>
+                                             </th>
+                                          </thead>
+                                        </tbody>
+                                     </table>
+                                 </div>   
+                                </div>
+                             </div>
+                         </div>
+                </form>
+                
+                <h:form enctype="multipart/form-data" prependId="false" h:id="formListDetalle" rendered="#{tablaGeneralBean.mostrarLisDetalle}"  onkeypress="return anular(event)"> >
+                    <div class="row">
+                      <div class="col-sm-2" >
+                          <span class="input-group-btn">
+                              <table class="table"> <tr>
+                                      <th><h:commandButton id="btngaregaDeta" value="Agregar" class="btn btn-primary btn-block m-t"  action="#{tablaGeneralBean.nuevoDetalle()}"  />
+                                          </th>
+                                   </tr>
+                              </table>       
+                     </span>
+                     </div>                    
+                     </div>                     
+                    <!-- Fila 0002 -->
+                    <div class="row">
+                        <!-- Lista de clientes -->
+                        <div class="col-sm-12">
+                                <div class="ibox-content">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> #{tablaGeneralBean.codigoDescripcion}</a></li>
+                                    </ul>
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Código </th>
+                                                            <th>Descripción</th>
+                                                            <th>       Modificar         </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <ui:repeat var="tabla" value="#{tablaGeneralBean.cobDetaList}" varStatus="tchnS">
+                                                        <tr height="10" >
+                                                            <th>#{tabla.ctablaDetId}</th>
+                                                            <th>#{tabla.ddescripcion}</th>                                                        
+                                                            <th>
+                                                                <span class="input-group-btn">
+                                                                    <h:commandButton id="btnModiDeta" value="Modificar"  class="btn btn-primary btn-block m-t" action="#{tablaGeneralBean.modificaDetalle(tabla)}"  />
+                                                                </span>
+                                                            </th>
+                                                        </tr>
+                                                    </ui:repeat> 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                </div>
+                        </div>
+                    </div>
+                </h:form>
+                
+                <form jsf:id="formAddTablaDetalle" rendered="#{tablaGeneralBean.mostrarAddTablaDetalle}"  onkeypress="return anular(event)">
+                    <h:inputHidden value = "#{tablaGeneralBean.tablaId}" id = "hiddenField" /> 
+                    <!-- Fila 03 Detalle --> 
+                    <div class="row">
+                         <!-- Filtros-->
+                         <div class="col-lg-12">
+                             <div class="ibox">
+                                    <ul class="nav nav-tabs">
+                                              <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Registro de detalle</a></li>
+                                   </ul>
+                                 <div class="ibox-content">
+                                      <table class="table table-bordered" >
+                                       <tbody>
+                                         <thead>
+                                             <th>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+ 
+                                                 <div class="row">
+                                                     <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Es detalle: </label>
+                                                      </div>
+                                                      
+                                                     <div class="col-sm-1">
+                                                         <h:selectOneMenu value="#{tablaGeneralBean.esdetDoc}" class="form-control input">
+                                                                                <f:selectItem itemLabel="Seleccione" noSelectionOption="true" itemValue ="" />
+                                                                                 <f:selectItem itemLabel="N"  itemValue ="N" />
+                                                                                 <f:selectItem itemLabel="S"  itemValue ="S" />
+                                                                   <f:ajax listener="#{tablaGeneralBean.listarDocNew()}" event="change" execute="@this" render="formAddTablaDetalle cbodoc" />                 
+                                                            </h:selectOneMenu>	
+                                                                 
+                                                     </div>
+                                                     
+                                                      <div class="col-sm-1"></div>
+                                                     <ui:fragment rendered="#{tablaGeneralBean.esdetDoc == 'N'}">          
+                                                  
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Es Contenedor: </label>
+                                                      </div>
+                                                     <div class="col-sm-1">
+                                                         <h:selectOneMenu value="#{tablaGeneralBean.esContDoc}" class="form-control input">
+                                                                                <f:selectItem itemLabel="Seleccione" noSelectionOption="true" itemValue ="" />
+                                                                                 <f:selectItem itemLabel="N"  itemValue ="N" />
+                                                                                 <f:selectItem itemLabel="S"  itemValue ="S" />
+                                                            </h:selectOneMenu>	
+                                                     </div>
+                                                     </ui:fragment>    
+                                               <div class="col-sm-1"></div></div>
+ 
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Descripcion: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <h:inputText class="input-sm form-control" id="descripcion" value="#{tablaGeneralBean.descripcionTablaGeneral}">
+                                                         </h:inputText>
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Abrev.: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <h:inputText class="input-sm form-control" id="descripcioncorta" value="#{tablaGeneralBean.descripcionCorta}">
+                                                         </h:inputText>
+
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                
+                                                <div class="row">
+                                                     <div class="col-sm-1"></div>
+                                                  <ui:fragment rendered="#{tablaGeneralBean.esdetDoc == 'S'}">         
+                                                     <div class="col-sm-1">
+                                                      <label class="font-noraml">Codigo Relación </label>
+                                                     </div>
+                                                     
+                                                     <div class="col-sm-3">
+                                                                <h:selectOneMenu value="#{tablaGeneralBean.IDDocPadre}" class="form-control input" id="cbodoc">
+                                                                    <f:selectItem itemLabel="Todos" noSelectionOption="true" />
+                                                                    <f:selectItems value="#{tablaGeneralBean.cobTablasDocInvList}" var="tab" itemValue="#{tab.ctablaDetId}"  itemLabel="#{tab.ddescripcion}" />
+                                                                </h:selectOneMenu>	
+
+                                                      </div>
+                                                  </ui:fragment>   
+                                                 </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Ultimo usuario: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <label class="font-noraml">#{tablaGeneralBean.usuario}</label>
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                        
+                                                 
+                                                 
+                                                 <div class="row">
+                                                     <div class="col-sm-3"> </div>
+                                                     <div class="col-sm-1" id="bt1" >
+                                                         <h:commandButton   id="btn1"  value="Guardar" class="btn btn-primary btn-block m-t"  action="#{tablaGeneralBean.insertarTablaDetalle()}"> 
+                                                         </h:commandButton>
+                                                    </div>
+                                                    <div  jsf:id="msg"  jsf:name="msg">
+                                                        <div jsf:rendered="#{tablaGeneralBean.showMsg}">
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    toastr.options = {
+                                                                        "closeButton": true,
+                                                                        "debug": false,
+                                                                        "progressBar": true,
+                                                                        "preventDuplicates": false,
+                                                                        "positionClass": "toast-top-right",
+                                                                        "onclick": null,
+                                                                        "showDuration": "400",
+                                                                        "hideDuration": "1000",
+                                                                        "timeOut": "7000",
+                                                                        "extendedTimeOut": "1000",
+                                                                        "showEasing": "swing",
+                                                                        "hideEasing": "linear",
+                                                                        "showMethod": "fadeIn",
+                                                                        "hideMethod": "fadeOut"
+                                                                    };
+                                                                    toastr.#{tablaGeneralBean.tipoMsj}('#{tablaGeneralBean.mensaje}', 'Mensaje');
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                     <div class="col-sm-1" >
+                                                         <h:commandButton   id="btn2"  value="cerrar" class="btn btn-primary btn-block m-t"   action="#{tablaGeneralBean.cerrarPantallaAddTablaDetalle()}"  /> 
+                                                     </div>
+                                                 </div>
+                                             </th>
+                                          </thead>
+                                        </tbody>
+                                     </table>
+                                 </div>   
+                                </div>
+                             </div>
+                         </div>
+                </form>
+                
+                <form jsf:id="formModiTablaDetalle" rendered="#{tablaGeneralBean.mostrarModiTablaDetalle}"  onkeypress="return anular(event)">
+                    <h:inputHidden value = "#{tablaGeneralBean.tablaId}" id = "hiddenField" /> 
+                    <!-- Fil
+                    a 03 Detalle --> 
+                    <div class="row">
+                         <!-- Filtros-->
+                         <div class="col-lg-12">
+                             <div class="ibox">
+                                    <ul class="nav nav-tabs">
+                                              <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Modificar detalle</a></li>
+                                   </ul>
+                                 <div class="ibox-content">
+                                      <table class="table table-bordered" >
+                                       <tbody>
+                                         <thead>
+                                             <th>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                     
+                                                      
+                                                     <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Codigo detalle: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <label class="font-noraml">#{tablaGeneralBean.tablaDetalleId}</label>
+                                                     </div>
+                                                    </div>
+
+                                                
+                                               <ui:fragment rendered="#{tablaGeneralBean.tablaId == '0004'}">          
+                                                   
+                                                 <div class="row">
+                                                     <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Es detalle: </label>
+                                                      </div>
+                                                    
+                                                    <div class="col-sm-1">
+                                                         <h:selectOneMenu value="#{tablaGeneralBean.esdetDoc}" class="form-control input">
+                                                                                <f:selectItem itemLabel="Seleccione" noSelectionOption="true" itemValue ="" />
+                                                                                 <f:selectItem itemLabel="N"  itemValue ="N" />
+                                                                                 <f:selectItem itemLabel="S"  itemValue ="S" />
+                                                                   <f:ajax listener="#{tablaGeneralBean.listarDocNew()}" event="click" execute="@this" render="formModiTablaDetalle cbodoc2" />                 
+                                                            </h:selectOneMenu>	
+                                                                 
+                                                     </div>
+                                                     
+                                                      <div class="col-sm-1"></div>
+                                                     <ui:fragment rendered="#{tablaGeneralBean.esdetDoc == 'N'}">          
+                                                  
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Es Contenedor: </label>
+                                                      </div>
+                                                     <div class="col-sm-1">
+                                                         <h:selectOneMenu value="#{tablaGeneralBean.esContDoc}" class="form-control input">
+                                                                                <f:selectItem itemLabel="Seleccione" noSelectionOption="true" itemValue ="" />
+                                                                                 <f:selectItem itemLabel="N"  itemValue ="N" />
+                                                                                 <f:selectItem itemLabel="S"  itemValue ="S" />
+                                                            </h:selectOneMenu>	
+                                                     </div>
+                                                     </ui:fragment>    
+                                                <div class="col-sm-1"></div></div>
+                                               </ui:fragment>
+                                               
+ 
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Descripcion: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <h:inputText class="input-sm form-control" id="descripcion" value="#{tablaGeneralBean.descripcionTablaGeneral}">
+                                                         </h:inputText>
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                
+
+                                                 <div class="row"> <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Abrev.: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <h:inputText class="input-sm form-control" id="descripcioncorta" value="#{tablaGeneralBean.descripcionCorta}">
+                                                         </h:inputText>
+
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                
+                                              <ui:fragment rendered="#{tablaGeneralBean.tablaId == '0004'}">          
+                                                
+                                                 <div class="row">
+                                                     <div class="col-sm-1"></div>
+                                                  <ui:fragment rendered="#{tablaGeneralBean.esdetDoc == 'S'}">         
+                                                     <div class="col-sm-1">
+                                                      <label class="font-noraml">Codigo Relación </label>
+                                                     </div>
+                                                     
+                                                     <div class="col-sm-3">
+                                                                <h:selectOneMenu value="#{tablaGeneralBean.IDDocPadre}" class="form-control input" id="cbodoc2">
+                                                                    <f:selectItem itemLabel="Todos" noSelectionOption="true" />
+                                                                    <f:selectItems value="#{tablaGeneralBean.cobTablasDocInvList}" var="tab" itemValue="#{tab.ctablaDetId}"  itemLabel="#{tab.ddescripcion}" />
+                                                                </h:selectOneMenu>	
+
+                                                      </div>
+                                                  </ui:fragment>   
+                                                 </div>
+                                              </ui:fragment>   
+                                               
+                                                  <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Ultimo usuario: </label>
+                                                      </div>
+                                                     <div class="col-sm-9">
+                                                         <label class="font-noraml">#{tablaGeneralBean.usuario}</label>
+                                                     </div>
+                                                </div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>
+                                                 <div class="row">  <div class="col-sm-1"></div></div>                                                        
+                                                 
+                                                 
+                                                 <div class="row">
+                                                     <div class="col-sm-3"> </div>
+                                                     <div class="col-sm-1" id="bt1" >
+                                                         <h:commandButton   id="btn1"  value="Guardar" class="btn btn-primary btn-block m-t"  action="#{tablaGeneralBean.modificarTablaDetalle()}"> 
+                                                         </h:commandButton>
+                                                    </div>
+                                                    <div  jsf:id="msg"  jsf:name="msg">
+                                                        <div jsf:rendered="#{tablaGeneralBean.showMsg}">
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    toastr.options = {
+                                                                        "closeButton": true,
+                                                                        "debug": false,
+                                                                        "progressBar": true,
+                                                                        "preventDuplicates": false,
+                                                                        "positionClass": "toast-top-right",
+                                                                        "onclick": null,
+                                                                        "showDuration": "400",
+                                                                        "hideDuration": "1000",
+                                                                        "timeOut": "7000",
+                                                                        "extendedTimeOut": "1000",
+                                                                        "showEasing": "swing",
+                                                                        "hideEasing": "linear",
+                                                                        "showMethod": "fadeIn",
+                                                                        "hideMethod": "fadeOut"
+                                                                    };
+                                                                    toastr.#{tablaGeneralBean.tipoMsj}('#{tablaGeneralBean.mensaje}', 'Mensaje');
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                     <div class="col-sm-1" >
+                                                         <h:commandButton   id="btn2"  value="cerrar" class="btn btn-primary btn-block m-t"   action="#{tablaGeneralBean.cerrarPantallaAddTablaDetalle()}"  /> 
+                                                     </div>
+                                                 </div>
+                                             </th>
+                                          </thead>
+                                        </tbody>
+                                     </table>
+                                 </div>   
+                                </div>
+                             </div>
+                         </div>
+                </form>                                                       
+                
+            </div> 
+
+            <!-- JS -->
+            <!-- Mainly scripts -->
+            <script src="../../resources/template/js/jquery-2.1.1.js"></script>
+            <script src="../../resources/template/js/bootstrap.min.js"></script>
+
+            <!-- Custom and plugin javascript -->
+            <script src="../../resources/template/js/inspinia.js"></script>
+            <script src="../../resources/template/js/plugins/pace/pace.min.js"></script>
+            <script src="../../resources/template/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+            <!-- Data picker -->
+            <script src="../../resources/template/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+            <!-- MENU -->
+            <script src="../../resources/template/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+            <!-- Date range use moment.js same as full calendar plugin -->
+            <script src="../../resources/template/js/plugins/fullcalendar/moment.min.js"></script>
+
+            <!-- Date range picker -->
+            <script src="../../resources/template/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+            <!-- grafico personal -->
+            <script src="../../resources/personal/js/table.js"></script> 
+
+            <!--- tabla -->
+            <script src="../../resources/template/js/plugins/jeditable/jquery.jeditable.js"></script>
+            <script src="../../resources/template/js/plugins/dataTables/datatables.min.js"></script>
+
+            <link href="../../resources/template/css/plugins/dataTables/datatables.min.css" rel="stylesheet"/>
+            
+            <!-- FooTable -->
+            <script src="../../resources/template/js/plugins/footable/footable.all.min.js"></script>
+            <link href="../../resources/template/css/plugins/footable/footable.core.css" rel="stylesheet"/>
+
+            <!-- Input Mask-->
+            <script src="../../resources/template/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+            <link href="../../resources/template/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet"/>
+
+            <!-- Toastr script -->
+            <script src="../../resources/template/js/plugins/toastr/toastr.min.js"></script>
+            <!-- Toastr style -->
+            <link href="../../resources/template/css/plugins/toastr/toastr.min.css" rel="stylesheet"/>
+
+
+            <!--- Css datapicker -->
+            <link href="../../resources/template/css/plugins/datapicker/datepicker3.css" rel="stylesheet"/>
+            <link href="../../resources/template/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet"/>
+            <link href="../../resources/template/css/plugins/clockpicker/clockpicker.css" rel="stylesheet"/>
+
+            <h:outputScript library="javax.faces" name="jsf.js"/>
+
+            <script >
+                                                    $('#divRangoFecha .input-daterange').datepicker({
+                                                        keyboardNavigation: false,
+                                                        forceParse: false,
+                                                        autoclose: true,
+                                                        format: 'dd/mm/yyyy',
+                                                        language: 'es',
+                                                        todayBtn: "linked"
+                                                    });
+                                                    $('#data_1 .input-group.date').datepicker({
+                                                        timePicker: true,
+                                                        timePickerIncrement: 30,
+                                                        startDate: '01/01/2008',
+                                                        endDate: '01/01/2030',
+                                                        format: 'dd/mm/yyyy',
+                                                        language: 'es',
+                                                        todayBtn: "linked",
+                                                        autoclose: true
+                                                    });
+            </script>
+
+               
+            <script type="text/javascript">
+               
+                function anular(e) {
+                    tecla = (document.all) ? e.keyCode : e.which;
+                    return (tecla != 13);
+               }  
+                
+                  
+            </script> 
+             
+        </ui:define>
+
+    </ui:composition> 
+
+</html>

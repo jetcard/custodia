@@ -1,0 +1,736 @@
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="es" 
+   xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions"
+      xmlns:pf="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <f:metadata>
+              <f:event type="postAddToView" listener="#{clienteCustodiaBean.listarFondos()}"  />
+                <f:event type="postAddToView" listener="#{clienteCustodiaBean.listarFechapor()}"  />
+ 
+ 
+    </f:metadata>
+
+ 
+ 
+    <ui:composition template="/resources/personal/plantillas/template.xhtml">
+        <ui:define name="content">
+            <!-- Paginacion header -->
+               <div class="row wrapper border-bottom white-bg page-heading">
+             
+                <div class="col-lg-10">
+                    <h2>Clientes</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="index.xhtml">Inicio</a>
+                        </li>
+                        <li>
+                            <a>Legal</a>
+                        </li>
+                        <li class="active">
+                            <strong>Movimientos</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- Filas-->
+            <div class="wrapper wrapper-content animated fadeInRight">
+                  <form jsf:id="formEstaCuentaF" >
+                    <!-- Filtros-->
+                    <div class="row">
+                        <!-- Filtros-->
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-title">
+                                    <h5>
+                                        Filtros
+                                        <small>Buscar de Clientes</small>
+                                    </h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <!-- Fila 01 Filtros --> 
+                                    <div class="row blue-bg">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                  <label class="font-noraml">Codigo:</label>
+                                                <input jsf:id="codigo" jsf:value="#{clienteCustodiaBean.maeInversion.CInversion}" class="input form-control" type="text" placeholder="Código"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                  <label class="font-noraml">DNI:</label>
+                                                <input jsf:id="DNI" jsf:value="#{clienteCustodiaBean.maeInversion.getcPersonaId().ANroDocumento}" class="form-control input" type="text" placeholder="Dni"/>
+                                            </div>
+                                        </div>
+                                         <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label class="font-noraml">Fondo:</label>
+                                                <div class="input-group">
+                                                      <h:selectOneMenu value="#{clienteCustodiaBean.maeFondo.CFondoId}" class="form-control input">
+                                                        <f:selectItem itemLabel="Todos" noSelectionOption="true" />
+                                                        <f:selectItems value="#{clienteCustodiaBean.maeFondoList}" var="fondo" itemValue="#{fondo.CFondoId}"  itemLabel="#{fondo.DFondo}" />
+                                                    </h:selectOneMenu>	
+                                                </div>
+                                            </div>
+                                        </div>
+                                         <div class="col-sm-1">
+                                            <span class="input-group-btn">
+                                                                               
+                                                <a jsf:id="linkBuscar" jsf:actionListener="#{clienteCustodiaBean.buscarDeudoresMov()}" class="btn btn-primary btn-block m-t"    >
+                                                    
+                                                    <i class="fa fa-search"></i>
+                                                    Buscar
+                                                </a>
+                                            </span>
+                                        </div>
+                                        
+                                       </div> 
+                                  
+                                                                  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+               
+                <div class="row">
+
+                    <!-- Lista de clientes -->
+                    <div class="col-sm-12">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Lista</a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="#tab-Sacif"><i class="fa fa-tty"></i> Detalle</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="tab-1" class="tab-pane active"   >
+                                        <form jsf:id="formDeudorBusqB" >
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered table-hover dataTables-cliente-deudor ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Código </th>
+                                                            <th>Fondo                 </th>
+                                                            <th>DNI</th>
+                                                            <th>Cliente</th>
+                                                            <th>Estado</th>
+                                                            <th>Prestamo</th>
+                                                            <th>Numero docs prestados</th>
+                                                            <th>Situación</th>
+                                                         </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <ui:repeat var="inver" value="#{clienteCustodiaBean.maeInversionList}" varStatus="inverS">
+                                                       
+                                                        <tr class="text-success">
+                                                            <td>
+                                                              
+                                                                 <ui:fragment rendered="#{!inver.SEstadof2.trim().equals('CONFORME') }">   
+                                                                     <a jsf:action="#{clienteCustodiaBean.obtenerSeguimientoDetalleMovi(inver)}" data-toggle="tab" href="#{inver.CInversion}" class="client-link">
+                                                                     <u>  #{inver.CInversion}</u>
+                                                                        <f:ajax execute="@this" render="frmDetalleCustodia tabla1 demoIdAx"/>
+                                                                    </a>
+                                                                 </ui:fragment>
+                                                        
+                                                                 <ui:fragment rendered="#{inver.SEstadof2.trim().equals('CONFORME') }">   
+                                                                       #{inver.CInversion}
+                                                                 </ui:fragment>
+                                                            
+                                                            </td>
+                                                            <td>#{inver.maeFondo.DFondo}</td>
+                                                            <td>#{inver.getcPersonaId().ANroDocumento}</td> 
+                                                            <td>#{inver.getcPersonaId().DApePat} #{inver.getcPersonaId().DApeMat}, #{inver.getcPersonaId().DNombres}</td> 
+                                                            <td>#{inver.SEstado}</td>
+                                                            <td>#{inver.SPrestamo}</td>
+                                                            <td>#{inver.NDocumento}</td>
+                                                            <td>
+                                                                <ui:fragment rendered="#{inver.ampliado=='01'}">
+                                                                <span class="label label-warning">Ampliado</span>
+                                                                </ui:fragment> 
+                                                                <ui:fragment rendered="#{inver.refinanciado =='01'}">
+                                                                    <span class="label label-warning">Refinanciado</span>
+                                                                </ui:fragment> 
+
+                                                                <ui:fragment rendered="#{inver.cancelado =='01'}">
+                                                                    <span class="label label-danger">Cancelado</span>
+                                                                </ui:fragment> 
+                                                                <ui:fragment rendered="#{inver.judicial =='01'}">
+                                                                    <span class="label label-danger">Judicial</span>
+                                                                </ui:fragment> 
+                                                                <ui:fragment rendered="#{inver.transfAmpl=='01'}">
+                                                                    <span class="label label-warning">Transf.Ampliado</span>
+                                                                </ui:fragment> 
+                                                                <ui:fragment rendered="#{inver.transfendosado=='01'}">
+                                                                    <span class="label label-warning">Transf.Endosado</span>
+                                                                </ui:fragment>
+                                                                <ui:fragment rendered="#{inver.transfrefin=='01'}">
+                                                                    <span class="label label-warning">Transf.Refinan</span>
+                                                                </ui:fragment>
+                                                            </td>
+                                                            
+                                                         </tr>
+                                                         
+                                                      </ui:repeat>  
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <!-- Estado de cuenta -->
+                                    <div id="tab-Sacif" class="tab-pane ">
+                                        <form jsf:id="frmDetalleCustodia">
+                                            <div class="panel-body" style="height: 900px;">
+                                            
+                                                <div class="row" style="height: 900px;">
+                                                    <table jsf:id="tabla1" class="table table">
+                                                    <div class="row" >
+                                                            <div class="col-sm-10">
+                                                                <h3 class="font-bold">
+                                                                 
+                                                                    <ui:fragment rendered="#{clienteCustodiaBean.maeInversionList2.size()>0}"> 
+                                                                        #{clienteCustodiaBean.maeInversionList2.get(0).CInversion} -#{clienteCustodiaBean.maeInversionList2.get(0).getcPersonaId().DApePat} #{clienteCustodiaBean.maeInversionList2.get(0).getcPersonaId().DApeMat}, #{clienteCustodiaBean.maeInversionList2.get(0).getcPersonaId().DNombres}
+                                                                    </ui:fragment>  
+                                                                </h3>
+                                                            </div>
+                                                      </div>
+                                                    
+                                                   <thead>
+ 
+                                                       <tr>
+                                                            <th>Documento              </th>
+                                                            <th>Estado</th>
+                                                            <th>Prestado</th>
+                                                            <th>Area Sol</th>
+                                                            <th>Solicitante</th>
+                                                            <th>F.Salida</th>
+                                                            <th>Días</th>
+                                                            <th>F.Entrega</th>
+                                                            <th>Motivo</th>
+                                                            <th>F.devolucion</th>
+                                                         </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <ui:repeat var="custodia" value="#{clienteCustodiaBean.maeInversionList2}" varStatus="inverTmp">
+                                                        <tr>
+                                                                <td class="text-navy  col-lg-3">  
+                                                                      <h:commandButton id="btnnuevo2" value=" #{custodia.descripcion}"   action="#{clienteCustodiaBean.obtenerVerificaDoc(custodia)}"  />
+                                                               </td>
+                                                              
+                                                               <td class="text-navy col-lg-1">
+                                                                   #{custodia.SEstado}
+                                                               </td>
+                                                               <td class="text-navy col-lg-1">
+                                                                   #{custodia.getcTipoInv()}
+                                                               </td>
+                                                               <td class="text-navy col-lg-1">
+                                                                   #{custodia.desDestino}
+                                                               </td>
+                                                               <td class="text-navy col-lg-1">
+                                                                   #{custodia.dusuarioNombres }
+                                                               </td>
+                                                               <td class="text-navy col-lg-1">
+                                                                   #{custodia.SFechaSal}
+                                                               </td>
+                                                               
+                                                               <td class="text-navy col-lg-1">
+                                                                   #{custodia.NDias }
+                                                               </td>
+                                                               
+                                                               <td class="text-navy col-lg-1">
+                                                                   #{custodia.SFechaIng}
+                                                               </td>
+                                                               <td class="text-navy col-lg-1">
+                                                                   #{custodia.STipOpera}
+                                                               </td>
+                                                               <td class="text-navy col-lg-1">
+                                                                   #{custodia.SFechaDevol}
+                                                               </td>
+                                                         
+                                                               </tr>
+                                                            </ui:repeat> 
+                                                            <tr><td></td><td></td><td></td><td></td><td></td><td></td>
+                                                               <td> 
+                                                                        
+                                                                        <div class="modal fade" jsf:id="custodiaModaljsf" id="custodiaModal" tabindex="-1" role="dialog" aria-labelledby="custodiaModalLabel" aria-hidden="true" >
+                                                                        <div class="modal-dialog" role="document">
+                                                                          <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" id="exampleModalLabel">Registrar Movimiento #{clienteCustodiaBean.maeInversionListDoc.get(0).getDescripcion() } </h5>
+                                                                        
+                                                                             <div class="modal-footer">
+                                                                              <button type="button" class="btn btn-secondary" data-dismiss="modal"  >
+                                                                                 
+                                                                                   <i class="fa fa-save">Grabar</i> </button>
+                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btncerrar" >Cerrar</button>
+                                                                         
+                                                                            </div>                                                                            
+                                                                            </div>
+                                                                          </div>
+                                                                        </div>
+                                                                      </div> 
+                                                                    <div  jsf:id="msg"  jsf:name="msg">
+                                                                        <div jsf:rendered="#{clienteCustodiaBean.showMsg}">
+                                                                        <script type="text/javascript">
+                                                                            $(document).ready(function () {
+                                                                                toastr.options = {
+                                                                                    "closeButton": true,
+                                                                                    "debug": false,
+                                                                                    "progressBar": true,
+                                                                                    "preventDuplicates": false,
+                                                                                    "positionClass": "toast-top-right",
+                                                                                    "onclick": null,
+                                                                                    "showDuration": "400",
+                                                                                    "hideDuration": "1000",
+                                                                                    "timeOut": "7000",
+                                                                                    "extendedTimeOut": "1000",
+                                                                                    "showEasing": "swing",
+                                                                                    "hideEasing": "linear",
+                                                                                    "showMethod": "fadeIn",
+                                                                                    "hideMethod": "fadeOut"
+                                                                                };
+                                                                                toastr.#{clienteCustodiaBean.tipoMsj}('#{clienteCustodiaBean.mensaje}', 'Mensaje');
+                                                                            });
+                                                                        </script>
+                                                                    </div>
+                                                                    </div>
+
+
+                                                                 </td>    
+                                                                 <td>
+                                                                     <ui:fragment rendered="#{clienteCustodiaBean.maeInversionList2.size()>0}"> 
+                                                                        <span class="input-group-btn">
+                                                                            <a jsf:id="linkCerrar" jsf:action="#{clienteCustodiaBean.SalirDetalleMov(custodia)}" class="btn btn-primary btn-block m-t"   >
+                                                                                 <i>Cerrar</i> 
+                                                                            </a>
+                                                                        </span>
+                                                                     </ui:fragment>   
+                                                                 </td><td></td><td></td>
+                                                            </tr>
+                                                         </tbody>
+                                                        </table>
+                                             
+                                                 </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                     
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  <div class="col-sm-8">
+                      
+                    <form jsf:id="formCustodia" rendered="#{clienteCustodiaBean.XViewDocu}"  onkeypress="return anular(event)" >
+                    <!-- Fila 03 Detalle --> 
+                    
+                    <div class="row">
+                         <!-- Filtros-->
+                         <div class="col-lg-12">
+                             <div class="ibox">
+                                    <ul class="nav nav-tabs">
+                                              <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> Registrar Movimientos</a></li>
+                                   </ul>
+                                     
+                                     
+                                  <div class="ibox-content">
+                                     
+                                      <table class="table table-bordered" >
+                                       <tbody>
+                                       <ui:repeat var="tchn" value="#{clienteCustodiaBean.maeInversionListDoc}" varStatus="tchnS2">
+                                         <thead>
+                                             
+                                             <th>
+                                                 <div class="row">
+                                                      <div class="col-sm-3" ></div>
+                                                    
+                                                     <div class="col-sm-3" >#{tchn.getcTipoInv()}</div>
+                                                     
+                                                     <div class="col-sm-3" >
+                                                         <h:commandButton   id="btnpdf"  value="PDF"   onclick="this.form.target='_blank'"     action="#{clienteCustodiaBean.GenerarPDF(tchn)}"  /> 
+                                                     </div> 
+                                                   
+                                                      <div class="col-sm-3" ></div>
+                                                      <div class="col-sm-3" ></div>
+                                                 </div>
+                                                 <div class="row"> <div class="col-sm-12" ></div> 
+                                                     </div>
+                                                 <div class="row"> <div class="col-sm-12" ></div> 
+                                                     </div>
+                                                 <div class="row">
+                                                      <div class="col-sm-1" ></div> 
+                                                      <div class="col-sm-2">  <label class="font-noraml">Area Solicitante: </label></div>
+                                                      <div class="col-sm-3">
+                                                       <div class="form-group">
+                                                           <div class="input-group">
+                                                                <h:selectOneMenu value="#{tchn.SDestino}" class="form-control m-b"    >
+                                                                    <f:selectItem itemLabel="Seleccione" noSelectionOption="true" itemValue ="" /> 
+                                                                    <f:selectItems value="#{clienteCustodiaBean.cobTablasEstInvList2}" var="Area" itemValue="#{Area.ctablaDetId}"  itemLabel="#{Area.ddescripcion}" />
+                                                                    <f:ajax listener="#{clienteCustodiaBean.mostrarSolicitante(tchn.SDestino)}"  render="espe1"/>
+                                                     
+                                                                </h:selectOneMenu>
+                                                     
+                                                           </div>   
+                                                            
+
+                                                       </div>
+                                                       </div>
+                                                      <div class="col-sm-1">  <label class="font-noraml">Solicitante </label></div>
+                                                      <div class="col-sm-4">
+                                                       <div class="form-group">
+                                                            <div class="input-group">
+                                                                <h:selectOneMenu id="espe1" value="#{tchn.SSolicitante}" class="form-control m-b"   >
+                                                                    <f:selectItem itemLabel="#{tchn.SSolicitante}" noSelectionOption="true" />
+                                                                    <f:selectItems value="#{clienteCustodiaBean.cobtablasListSoli}" var="Soli" itemValue="#{Soli.ctablaDetId}"  itemLabel="#{Soli.ddescripcion}" />
+                                                                </h:selectOneMenu>	
+                                                                
+                                                            </div>
+                                                        </div>
+                                                       </div>
+                                               
+                                                 </div>
+                                                 
+                                                 
+                                                  <div class="row">
+                                                      <ui:fragment rendered="#{tchn.STipOpera=='0002'}">
+                                                       
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-2">
+                                                      <label class="font-noraml">Fecha de Salida </label>
+                                                      </div>
+                                                      <div class="col-sm-2">
+                                                            <div id="divRangoFecha1" class="form-group">
+                                                               <div id="datepicker" class="input-daterange">
+                                                                   <h:inputText class="input-sm" value="#{tchn.DFechaSal}" >
+                                                                         <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                                       </h:inputText>
+                                                               </div>
+                                                           </div>     
+                                                     </div>
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-1">
+                                                      <label class="font-noraml">Dias de Prestamo </label>
+                                                      </div>
+                                                      <div class="col-sm-2">
+                                                         <div class="form-group" >
+                                                             <h:inputText  class="spinner"  id="dias" maxlength="2"  value="#{tchn.NDias}" onkeypress="if (ValidaSoloNumeros(event)) {
+                                                                                                           if (ValidaEnter(event)) {
+                                                                                                           }
+                                                                                                           } else {
+                                                                                                           return false;
+                                                                                                           }"/>
+                                                           </div>
+                                                         </div>
+                                                   </ui:fragment>
+                                                  
+                                                       <ui:fragment rendered="#{tchn.STipOpera=='0001'}">
+                                                       
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-2">
+                                                      <label class="font-noraml">Fecha de Devolucion </label>
+                                                      </div>
+                                                      <div class="col-sm-2">
+                                                            <div id="divRangoFecha1" class="form-group">
+                                                               <div id="datepicker" class="input-daterange">
+                                                                   <h:inputText class="input-sm" value="#{tchn.DFechaIng}" >
+                                                                         <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                                       </h:inputText>
+                                                               </div>
+                                                           </div>     
+                                                     </div>
+                                                      
+                                                   </ui:fragment>
+                                                      
+                                                  </div>
+                                                 
+                                                 
+                                                  <div class="row">
+                                                     <ui:fragment rendered="#{tchn.STipOpera=='0002'}">
+                                                     
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-2">
+                                                      <label class="font-noraml">Fecha Estimada ingreso: </label>
+                                                      </div>
+                                                      <div class="col-sm-2">
+                                                             <div id="divRangoFecha1" class="form-group">
+                                                                    <div id="datepicker" class="input-daterange">
+                                                                        <h:inputText class="input-sm" value="#{tchn.DFechaIng}" >
+                                                                              <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                                        </h:inputText>
+                                                                    </div>
+                                                                </div>     
+                                                       </div>
+       
+                                                      <div class="col-sm-1"></div>
+                                                      <div class="col-sm-2">
+                                                      <label class="font-noraml">Motivo </label>
+                                                      </div>
+                                                      <div class="col-sm-3">
+                                                            <div class="input-group">
+                                                                <h:selectOneMenu value="#{tchn.SMotivo}" class="form-control m-b"   >
+                                                                    <f:selectItem itemLabel="#{tchn.SMotivo}" noSelectionOption="true" />
+                                                                    <f:selectItems value="#{clienteCustodiaBean.cobTablasMotInvList}" var="moti" itemValue="#{moti.ctablaDetId}"  itemLabel="#{moti.ddescripcion}" />
+                                                                </h:selectOneMenu>	
+                                                                
+                                                            </div>
+                                                    
+                                                         </div>
+                                                     </ui:fragment>   
+                                                     <ui:fragment rendered="#{tchn.STipOpera=='0001'}">
+                                                              
+                                                            <div class="col-sm-1"></div>
+                                                            <div class="col-sm-2">
+                                                             <label class="font-noraml">Documento</label>
+                                                             </div>
+
+                                                            <div>
+                                                                <h:inputText id="txtdocu1"  class="col-lg-5" disabled="true" value="#{tchn.descripcion}" />
+                                                           </div> 
+                                                            <div>
+                                                                    <input  jsf:id="ckSEG1"  type="checkbox"   jsf:value="#{tchn.XFlagSel}"     /> Todos los Documentos
+                                                            </div>
+                                              
+                                                     </ui:fragment>   
+                                                 
+                                                  </div>
+                                                 
+                                                 <div class="row"> 
+                                                   <ui:fragment rendered="#{tchn.STipOpera=='0002'}">
+                                                       
+                                                     <div class="col-sm-1"></div>
+                                                     <div class="col-sm-2">
+                                                      <label class="font-noraml">Documento</label>
+                                                      </div>
+                                                     
+                                                     <div>
+                                                         <h:inputText id="txtdocu"  class="col-lg-5" disabled="true" value="#{tchn.descripcion}" />
+                                                      </div> 
+                                                    
+                                                     <div >
+                                                               <input  jsf:id="ckSEG2"  type="checkbox"   jsf:value="#{tchn.XFlagSel}"      /> Todos los Documentos
+                                                       </div>
+                                                     </ui:fragment>   
+                                                     
+                                                 </div>
+                                                 <div class="row">
+                                                     
+                                                     <div class="col-sm-1"></div>
+                                                     <div class="col-sm-2">
+                                                             <label class="font-noraml">Comentarios</label>
+                                                         </div>
+                                                 
+                                                     
+                                                     <div>
+                                                         <h:inputTextarea class="col-lg-8" id="txtcomen"  value="#{tchn.SComentario}" />
+                                                     </div>
+                                                     
+                                                 </div>
+                                                 <div class="row">   
+                                                     <div class="col-sm-3" ></div>
+                                                     <div class="col-sm-2" >
+                                                           <h:commandButton   id="btn1"  value="Registrar" class="btn btn-primary btn-block m-t"  action="#{clienteCustodiaBean.guardarInformacion(tchn)}"   > 
+                                                                 <f:ajax  execute="formCustodia"  render="msg2 formCustodia demoIdAx"  />
+                                                            </h:commandButton>
+                                                        
+                                                        </div>
+                                                     <div class="col-sm-1" >
+                                                  
+                                                    <div jsf:id="msg2" jsf:name="msg2">
+                                                        <div jsf:rendered="#{clienteCustodiaBean.showMsg}">
+                                                            <script type="text/javascript">
+                                                                $(document).ready(function () {
+                                                                    toastr.options = {
+                                                                        "closeButton": true,
+                                                                        "debug": false,
+                                                                        "progressBar": true,
+                                                                        "preventDuplicates": false,
+                                                                        "positionClass": "toast-top-right",
+                                                                        "onclick": null,
+                                                                        "showDuration": "400",
+                                                                        "hideDuration": "1000",
+                                                                        "timeOut": "7000",
+                                                                        "extendedTimeOut": "1000",
+                                                                        "showEasing": "swing",
+                                                                        "hideEasing": "linear",
+                                                                        "showMethod": "fadeIn",
+                                                                        "hideMethod": "fadeOut"
+                                                                    };
+                                                                    toastr.#{clienteCustodiaBean.tipoMsj}('#{clienteCustodiaBean.mensaje}', 'Mensaje');
+                                                                });
+                                                            </script>
+                                                        </div>
+
+                                                    </div>
+                                                     </div>   
+                                                     <div class="col-sm-2" >
+                                                         <h:commandButton   id="btncerrar"  value="cerrar" onclick="this.form.target='_self'" class="btn btn-primary btn-block m-t"   action="#{clienteCustodiaBean.SalirDetalleMov(tchn)}"  >
+                                                           
+                                                         </h:commandButton>      
+                                                     </div>
+                                                 
+                                                 </div>
+                                                
+                                             </th>
+
+                                          </thead>
+                                         
+                                         </ui:repeat> 
+                                        </tbody>
+                                        
+                                        
+                                     </table>
+                                     
+                                 </div>   
+                                      
+                                </div>
+                             </div>
+                         </div>
+                    
+                   
+
+                </form> 
+                
+ 
+                </div> 
+               
+                    </div> 
+               
+     </div>
+     
+          
+ 
+
+            <!-- JS -->
+            <!-- Mainly scripts -->
+            <script src="../../resources/template/js/jquery-2.1.1.js"></script>
+            <script src="../../resources/template/js/bootstrap.min.js"></script>
+
+            <!-- Custom and plugin javascript -->
+            <script src="../../resources/template/js/inspinia.js"></script>
+            <script src="../../resources/template/js/plugins/pace/pace.min.js"></script>
+            <script src="../../resources/template/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+            <!-- Data picker -->
+            <script src="../../resources/template/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+            <!-- MENU -->
+            <script src="../../resources/template/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+            <!-- Date range use moment.js same as full calendar plugin -->
+            <script src="../../resources/template/js/plugins/fullcalendar/moment.min.js"></script>
+
+            <!-- Date range picker -->
+            <script src="../../resources/template/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+            <!-- grafico personal -->
+            <script src="../../resources/personal/js/table.js"></script> 
+
+            <!--- tabla -->
+            <script src="../../resources/template/js/plugins/jeditable/jquery.jeditable.js"></script>
+            <script src="../../resources/template/js/plugins/dataTables/datatables.min.js"></script>
+
+            <link href="../../resources/template/css/plugins/dataTables/datatables.min.css" rel="stylesheet"/>
+            
+            <!-- FooTable -->
+            <script src="../../resources/template/js/plugins/footable/footable.all.min.js"></script>
+            <link href="../../resources/template/css/plugins/footable/footable.core.css" rel="stylesheet"/>
+
+            <!-- Input Mask-->
+            <script src="../../resources/template/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+            <link href="../../resources/template/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet"/>
+
+            <!-- Toastr script -->
+            <script src="../../resources/template/js/plugins/toastr/toastr.min.js"></script>
+            <!-- Toastr style -->
+            <link href="../../resources/template/css/plugins/toastr/toastr.min.css" rel="stylesheet"/>
+
+
+            <!--- Css datapicker -->
+            <link href="../../resources/template/css/plugins/datapicker/datepicker3.css" rel="stylesheet"/>
+            <link href="../../resources/template/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet"/>
+            <link href="../../resources/template/css/plugins/clockpicker/clockpicker.css" rel="stylesheet"/>
+
+            <h:outputScript library="javax.faces" name="jsf.js"/>
+
+            <div jsf:id="demoIdAx">
+                <script>
+                    $('#divRangoFecha .input-daterange').datepicker({
+                        keyboardNavigation: false,
+                        forceParse: false,
+                        autoclose: true,
+                        format: 'dd/mm/yyyy',
+                        language: 'es'
+                    });
+                    
+                     $('#divRangoFecha1 .input-daterange').datepicker({
+                        keyboardNavigation: false,
+                        forceParse: false,
+                        autoclose: true,
+                        format: 'dd/mm/yyyy',
+                        language: 'es'
+                    });
+                    
+                
+                   
+                </script>
+           
+            <script type="text/javascript">
+               
+                function anular(e) {
+                    tecla = (document.all) ? e.keyCode : e.which;
+                    return (tecla != 13);
+               }  
+                
+                  
+            </script> 
+            </div>
+                <script type="text/javascript">
+                function ValidaSoloNumeros(evt) {
+                   
+                     var dato_a_comprobar =(evt.which) ? evt.which : evt.keyCode;
+                     var letra= String.fromCharCode(dato_a_comprobar)
+                     var valoresAceptados = /^[0-9]+$/;
+                        if (letra.match(valoresAceptados)){
+                           return true;
+                        } else {
+                          alert ("No es numérico");
+                          return false;
+                       }  
+                       
+                       
+                 }
+
+                    function ValidaEnter(evt) {
+                        var charCode = (evt.which) ? evt.which : evt.keyCode;
+                        if (charCode === 13) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    
+                
+                 </script>
+       
+             
+        </ui:define>
+
+    </ui:composition> 
+
+</html>

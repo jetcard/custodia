@@ -1,0 +1,304 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="es" 
+   xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions"
+      xmlns:pf="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    
+
+    <ui:composition template="/resources/personal/plantillas/template.xhtml">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        
+        <ui:define name="content">
+            
+            <f:event type="postAddToView" listener="#{generadorDocumentoBean.listarFondos()}"  />
+            <f:event type="postAddToView" listener="#{generadorDocumentoBean.initTipoCons(loginBean,'Nueva constancia de anulación')}"  />            
+            <f:event type="postAddToView" listener="#{generadorDocumentoBean.initTipoCons('0002','Anulaciones_lista',null)}"  />
+            <f:event type="postAddToView" listener="#{generadorDocumentoBean.listarFormaConstLiquidacion(generadorDocumentoBean.maeInversion.SCODDocumento)}"  />
+            
+                
+            <div class="panel-group">
+            &nbsp;
+
+                <div class="panel panel-default" style="border-radius: 0;">      
+                  <div class="panel-body">
+
+                        <div class="col-lg-12">   
+
+                            <h:form id="formDeudorBusq"  class="form-horizontal">
+
+                                <div class="form-group">
+
+                                    <div class="col-sm-4">
+                                        <label for="codigo" class="form-label">Código</label>
+                                        <div class="input-group">
+                                          <h:inputText required="true" value="#{generadorDocumentoBean.maeInversion.CInversion}" id="codigo" class="form-control" />  
+                                          <div class="input-group-btn">
+                                              <h:commandLink class="btn btn-default" actionListener="#{generadorDocumentoBean.buscarDeudor()}">...                                              
+                                              </h:commandLink>
+                                          </div>
+                                        </div>
+
+                                    </div>                            
+                                    <div class="col-sm-4"> 
+                                        <label for="txtFondo" class="form-label" >Fondos</label>
+                                        <h:inputHidden value="#{generadorDocumentoBean.maeInversion.maeFondo.CFondoId}" id="hdnFondo" />
+                                        <h:inputText value="#{generadorDocumentoBean.maeInversion.maeFondo.DFondo}" id="txtFondo" class="form-control" readonly="true" />
+                                    </div>                            
+                                    <div class="col-sm-4">
+                                        <label for="txtDni" class="form-label">Dni</label>                                
+                                        <h:inputText value="#{generadorDocumentoBean.maeInversion.getcPersonaId().ANroDocumento}" id="txtDni" class="form-control" readonly="true" />                                
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                 <div class="col-sm-4">
+                                     <label for="txtPersona" class="form-label">Principal</label>                                                                
+                                     <h:inputText value="#{generadorDocumentoBean.maeInversion.getcPersonaId().DApePat} #{generadorDocumentoBean.maeInversion.getcPersonaId().DApeMat}, #{generadorDocumentoBean.maeInversion.getcPersonaId().DNombres}" id="txtPersona" class="form-control" readonly="true" />
+
+                                 </div>                            
+                                 <div class="col-sm-4"> 
+                                     <label for="txtCuotas" class="form-label" >Cuotas atrasadas</label>                               
+                                     <h:inputText value="#{generadorDocumentoBean.maeInversion.NCuotas}" id="txtCuotas" class="form-control" readonly="true" />
+                                 </div>                            
+                                 <div class="col-sm-4">
+                                     <label for="txtUltdoc" class="form-label">Ult doc generado</label>                                
+                                     <h:inputText value="#{generadorDocumentoBean.maeInversion.descripcion}" id="txtUltdoc" class="form-control" readonly="true" />
+                                     <h:commandButton    id="btn1"  value="..."  class="btn btn-primary"  actionListener="#{generadorDocumentoBean.buscarDeudor()}" style="display:none;" />
+                                 </div>
+                                </div>
+
+                                <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label for="cmbFormaCons" class="form-label">Formato de Constancia</label>                                                        
+                                    <h:selectOneMenu  value="#{generadorDocumentoBean.maeInversion.STCarta}" class="form-control" id="cmbFormaCons"   >
+                                        <f:selectItem itemLabel="Seleccione" noSelectionOption="true" itemValue ="0000"  />
+                                        <f:selectItems value="#{generadorDocumentoBean.listaFormaConsLiqui}" var="FormaConsLiq" itemValue="#{FormaConsLiq.ctablaDetId}"  itemLabel="#{FormaConsLiq.ddescripcion}" />
+                                        <f:ajax event="change" execute="cmbFormaCons" render="hdnNombreFormato" listener="#{generadorDocumentoBean.buscarNombreFormato(generadorDocumentoBean.maeInversion.STCarta)}" />
+                                    </h:selectOneMenu>
+                                    <h:inputHidden value="#{generadorDocumentoBean.maeInversion.SNombreFormato}" id="hdnNombreFormato" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="divFechaEmision" class="form-label">Fecha de Emisión</label>                                                        
+                                    <div id="divFechaEmision" class="input-group date"  >
+                                        <h:inputText class="form-control"  value="#{generadorDocumentoBean.maeInversion.FEmision}"   >
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:inputText>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                   </div>	
+
+                                </div>
+                                <div class="col-sm-4">
+
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="col-sm-6">
+                                     <label for="txtCuotas" class="form-label" >Comentario</label>
+                                     <h:inputTextarea value="#{generadorDocumentoBean.maeInversion.SComentario}"  id="txtComentario" class="form-control" ></h:inputTextarea>
+                                </div>
+                                <div class="col-sm-6">
+                                     <label for="tblPropietarios" class="form-label">Propietarios</label>
+                                     <table id="tblPropietarios" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Dni</th>
+                                                <th>Nombres</th>
+                                                <th>Porcentaje</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                            
+                                            <ui:repeat var="allProp" value="#{generadorDocumentoBean.maeInversionList4}" varStatus="allProps">                                                                
+                                                    <tr>
+                                                    <td>   
+                                                        #{allProp.getcPersonaId().ANroDocumento}
+                                                    </td>
+                                                    <td>
+                                                        #{allProp.getcPersonaId().nombresCompleto}
+                                                    </td>
+                                                    <td>
+                                                        #{allProp.getcPersonaId().porcentaje}
+                                                    </td>
+
+                                                    </tr>                                                         
+                                            </ui:repeat>
+                                        </tbody>
+                                     </table>
+                                 </div>
+                                </div>
+
+                                <div class="form-group">
+                                <div class="col-sm-11">
+                                </div>
+                                 <div class="col-sm-1">                                     
+                                     <h:commandButton    id="btnGrabar"  value="GRABAR"  class="btn btn-success"  action="#{generadorDocumentoBean.generarConstancia(generadorDocumentoBean.maeInversion)}"  />                                      
+                                 </div>                                
+                                </div>
+                            </h:form>  
+
+                        </div> 
+                  </div>
+                </div>
+
+            </div>
+            
+
+            <!-- JS -->
+            <!-- Mainly scripts 
+            <script src="../../resources/template/js/jquery-2.1.1.js"></script>
+            -->
+            <script src="../../resources/template/js/jquery-3.1.1.min.js" type="text/javascript"></script>
+            <script src="../../resources/template/js/bootstrap.min.js"></script>
+
+            <!-- Custom and plugin javascript -->
+            <script src="../../resources/template/js/inspinia.js"></script>
+
+            <script src="../../resources/template/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+            <!-- Chosen -->
+            <script src="../../resources/template/js/plugins/chosen/chosen.jquery.js"></script>
+
+            <!-- JSKnob -->
+            <script src="../../resources/template/js/plugins/jsKnob/jquery.knob.js"></script>
+
+            <!-- Input Mask-->
+            <script src="../../resources/template/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+            <!-- Data picker -->
+            <script src="../../resources/template/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+            <!-- NouSlider -->
+            <script src="../../resources/template/js/plugins/nouslider/jquery.nouislider.min.js"></script>
+
+            <!-- Switchery -->
+            <script src="../../resources/template/js/plugins/switchery/switchery.js"></script>
+
+            <!-- IonRangeSlider -->
+            <script src="../../resources/template/js/plugins/ionRangeSlider/ion.rangeSlider.min.js"></script>
+
+            <!-- iCheck -->
+            <script src="../../resources/template/js/plugins/iCheck/icheck.min.js"></script>
+
+            <!-- MENU -->
+            <script src="../../resources/template/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+            <!-- Color picker -->
+            <script src="../../resources/template/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+
+            <!-- Clock picker -->
+            <script src="../../resources/template/js/plugins/clockpicker/clockpicker.js"></script>
+
+            <!-- Image cropper -->
+            <script src="../../resources/template/js/plugins/cropper/cropper.min.js"></script>
+
+            <!-- Date range use moment.js same as full calendar plugin -->
+            <script src="../../resources/template/js/plugins/fullcalendar/moment.min.js"></script>
+
+            <!-- Date range picker -->
+            <script src="../../resources/template/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+            <!-- Select2 -->
+            <script src="../../resources/template/js/plugins/select2/select2.full.min.js"></script>
+
+            <!-- TouchSpin -->
+            <script src="../../resources/template/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+            <!-- grafico personal -->
+            <script src="../../resources/personal/js/calendar.js"></script> 
+            <script src="../../resources/personal/js/table.js"></script> 
+
+            <!--- tabla 
+            <script src="../../resources/template/js/plugins/jeditable/jquery.jeditable.js"></script>
+            <script src="../../resources/template/js/plugins/dataTables/datatables.min.js"></script>
+            -->
+            <script src="../../resources/personal/js/datatable/datatables.min.js" type="text/javascript"></script>
+
+            <!--- tabla
+            <link href="../../resources/template/css/plugins/dataTables/datatables.min.css" rel="stylesheet"/>
+            -->
+            <link href="../../resources/personal/js/datatable/datatables.min.css" rel="stylesheet" type="text/css"/>
+
+            <link href="../../resources/template/css/plugins/datapicker/datepicker3.css" rel="stylesheet"/>
+            <link href="../../resources/template/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet"/>
+            <link href="../../resources/template/css/plugins/clockpicker/clockpicker.css" rel="stylesheet"/>
+
+
+            <!-- Toastr script -->
+            <script src="../../resources/template/js/plugins/toastr/toastr.min.js"></script>
+            <!-- Toastr style -->
+            <link href="../../resources/template/css/plugins/toastr/toastr.min.css" rel="stylesheet"/>
+
+             <div jsf:id="demoIdAx">
+                <script>
+                        function msg(){
+                              $(document).ready(function () {
+                                   if  (#{generadorDocumentoBean.XViewDocu4}){
+                                    toastr.options = {
+                                        "closeButton": true,
+                                        "debug": false,
+                                        "progressBar": true,
+                                        "preventDuplicates": false,
+                                        "positionClass": "toast-top-right",
+                                        "onclick": null,
+                                        "showDuration": "400",
+                                        "hideDuration": "1000",
+                                        "timeOut": "7000",
+                                        "extendedTimeOut": "1000",
+                                        "showEasing": "swing",
+                                        "hideEasing": "linear",
+                                        "showMethod": "fadeIn",
+                                        "hideMethod": "fadeOut"
+                                    };
+                                    //toastr.#{generadorDocumentoBean.tipoMsj}('#{generadorDocumentoBean.mensaje}', 'Mensaje');
+                                    toastr.error('#{generadorDocumentoBean.mensaje}', 'Mensaje');
+                                }
+                                });
+       
+                    }
+                               
+                    
+                    
+                    $('#divFechaEmision').datepicker({
+                       keyboardNavigation: false,
+                       forceParse: false,
+                       autoclose: true,
+                       format: 'dd/mm/yyyy',
+                       language: 'es'
+                   });                    
+                    
+                                
+                </script>
+            </div>
+             <script>
+                 function ejecutar(){
+                     
+                    $("#btngenera").trigger("click");
+                        msg();
+                    } 
+                            
+                    $('#divRangoFecha1 .input-daterange').datepicker({
+                        keyboardNavigation: false,
+                        forceParse: false,
+                        autoclose: true,
+                        format: 'dd/mm/yyyy',
+                        language: 'es'
+                    });
+                    
+                
+    
+            </script>
+                        
+        </ui:define>
+
+    </ui:composition> 
+
+</html>

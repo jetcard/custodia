@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">    
+    <system systemId="file:/D:/ultimaversioneva/EVA-20200522_SIS_0156_CambioxNuevaMetodologiaCalculoInteres/webcustodia/seguridadWS.wsdl" uri="wsdl/seguridadWS.wsdl"/>
+    <system systemId="file:/E:/EVAYUL/webcustodia/seguridadWS.wsdl" uri="wsdl/seguridadWS.wsdl"/>
+    <system systemId="file:/E:/EVA-20190628_LEG_0129_LEGAL_DEMANDA_YUL/webcustodia/seguridadWS.wsdl" uri="wsdl/seguridadWS.wsdl"/>
+    <system systemId="file:/D:/FUENTESEVA20190912/EVA-20190821_LEG_0131_VALIDACION_LEGAL_REG_CORREO_FACT_ELEC/webcustodia/seguridadWS.wsdl" uri="wsdl/seguridadWS.wsdl"/>
+    <system systemId="file:/D:/FUENTESEVA20190912/EVA-20191030_SIS_0133_586_MIGRAR_EVA_localhost/webcustodia/seguridadWS.wsdl" uri="wsdl/seguridadWS.wsdl"/>
+    <system systemId="file:/D:/ultimaversioneva/EVA-20200522_SIS_0156_CambioxNuevaMetodologiaCalculoInteres/webcustodia/seguridadWS.wsdl" uri="wsdl/seguridadWS.wsdl"/>
+    <system systemId="file:/C:/PROYECTOS/EVA-20201016_SIS_0152_Interes/webcustodia/seguridadWS.wsdl" uri="wsdl/seguridadWS.wsdl"/>
+    <system systemId="file:/C:/PROYECTOS/ProyectoLegal/eva/EVA-20201016_SIS_0152_Interes444/webcobranza/seguridadWS.wsdl" uri="wsdl/seguridadWS.wsdl"/>
+    <system systemId="file:/C:/Proyectos/custodiafase2/webcustodia-20210308_SIS_CONTINGENCIA/webcustodia/seguridadWS.wsdl" uri="wsdl/seguridadWS.wsdl"/>
+    <system systemId="http://localhost:8080/ProcesamientoCredencial-ejb-1.0-SNAPSHOT/seguridadWS/seguridadWS?wsdl" uri="wsdl/localhost_8686/ProcesamientoCredencial-ejb-1.0-SNAPSHOT/seguridadWS/seguridadWS.wsdl"/>
+</catalog>
